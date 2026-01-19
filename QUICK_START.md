@@ -38,7 +38,7 @@ open TextListener.xcodeproj
 
 ### Build do Terminal
 ```bash
-cd /Users/terryrodriguesmota/Dropbox/Cursor-ai-agent/text-listener-app
+cd /path/to/text-listener-app
 xcodebuild -project TextListener.xcodeproj -scheme TextListener -configuration Debug build
 ```
 
@@ -50,7 +50,7 @@ xcodebuild -project TextListener.xcodeproj -scheme TextListener clean
 ### Executar sem Xcode
 ```bash
 xcodebuild -project TextListener.xcodeproj -scheme TextListener -configuration Debug build
-open /Users/terryrodriguesmota/Library/Developer/Xcode/DerivedData/TextListener-*/Build/Products/Debug/TextListener.app
+open ~/Library/Developer/Xcode/DerivedData/TextListener-*/Build/Products/Debug/TextListener.app
 ```
 
 ## 📝 Notas

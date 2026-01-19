@@ -34,8 +34,21 @@ struct MenuBarIcon: View {
 
 // #region agent log helper
 func writeDebugLog(_ logData: [String: Any]) {
-    let logPath = "/Users/terryrodriguesmota/Dropbox/Cursor-ai-agent/text-listener-app/.cursor/debug.log"
-    let logDir = "/Users/terryrodriguesmota/Dropbox/Cursor-ai-agent/text-listener-app/.cursor"
+    // Use app's support directory instead of hardcoded path
+    guard let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory, 
+                                                      in: .userDomainMask).first else {
+        // Fallback to console if we can't get app support directory
+        if let jsonData = try? JSONSerialization.data(withJSONObject: logData),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("DEBUG: \(jsonString)")
+        }
+        return
+    }
+    
+    let appDir = appSupportDir.appendingPathComponent("TextListener")
+    let logDir = appDir.path
+    let logPath = appDir.appendingPathComponent("debug.log").path
+    
     do {
         // Create directory if it doesn't exist
         try FileManager.default.createDirectory(atPath: logDir, withIntermediateDirectories: true, attributes: nil)

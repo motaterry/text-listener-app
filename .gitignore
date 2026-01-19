@@ -94,6 +94,9 @@ iOSInjectionProject/
 .AppleDouble
 .LSOverride
 
+# Cursor IDE debug logs
+.cursor/
+
 # Thumbnails
 ._*
 
