@@ -1,107 +1,107 @@
 # TextListener
 
-Um utilitário nativo para macOS que captura texto selecionado em qualquer aplicativo e o lê em voz alta usando TTS (Text-to-Speech).
+A native macOS utility that captures selected text from any application and reads it aloud using TTS (Text-to-Speech).
 
-## Características
+## Features
 
-- 🎯 **Menu Bar Only**: Roda exclusivamente na barra de menu (sem ícone no Dock)
-- 🎤 **Captura de Texto**: Usa Accessibility API para capturar texto selecionado globalmente
-- 🔊 **Síntese de Voz**: Utiliza AVSpeechSynthesizer para leitura em voz alta
-- ⚡ **Controles de Velocidade**: Slider para ajustar a velocidade da leitura
-- 🎛️ **Janela Flutuante**: Janela de controle sempre no topo com progresso da leitura
-- 🎨 **UI Moderna**: Interface seguindo princípios heurísticos de Nielsen com efeitos blur
+- 🎯 **Menu Bar Only**: Runs exclusively in the menu bar (no Dock icon)
+- 🎤 **Text Capture**: Uses Accessibility API to capture selected text globally
+- 🔊 **Speech Synthesis**: Utilizes AVSpeechSynthesizer for text-to-speech
+- ⚡ **Speed Controls**: Slider to adjust reading speed
+- 🎛️ **Floating Window**: Always-on-top control window with reading progress
+- 🎨 **Modern UI**: Interface following Nielsen's heuristic principles with blur effects
 
-## Requisitos
+## Requirements
 
-- macOS 13.0+ (Ventura ou superior)
+- macOS 13.0+ (Ventura or later)
 - Xcode 14.0+
 - Swift 5.7+
 
-## Estrutura do Projeto
+## Project Structure
 
 ```
 TextListener/
-├── TextListenerApp.swift          # App principal com MenuBarExtra
-├── SpeechManager.swift            # Gerenciador de síntese de voz
-├── TextCaptureManager.swift       # Captura de texto via Accessibility API
-├── MenuBarView.swift              # Interface da barra de menu
-├── FloatingControlWindow.swift    # Janela flutuante de controle
-├── FloatingWindowModifier.swift   # Modificador para configurar janela flutuante
-└── Info.plist                     # Configuração (LSUIElement = true)
+├── TextListenerApp.swift          # Main app with MenuBarExtra
+├── SpeechManager.swift            # Speech synthesis manager
+├── TextCaptureManager.swift       # Text capture via Accessibility API
+├── MenuBarView.swift              # Menu bar interface
+├── FloatingControlWindow.swift    # Floating control window
+├── FloatingWindowModifier.swift   # Modifier to configure floating window
+└── Info.plist                     # Configuration (LSUIElement = true)
 ```
 
-## Configuração
+## Setup
 
-### 1. Criar Projeto no Xcode
+### 1. Create Project in Xcode
 
-1. Abra o Xcode
-2. Crie um novo projeto macOS App
-3. Selecione SwiftUI como interface
-4. Copie os arquivos deste repositório para o projeto
+1. Open Xcode
+2. Create a new macOS App project
+3. Select SwiftUI as the interface
+4. Copy the files from this repository to the project
 
-### 2. Configurar Info.plist
+### 2. Configure Info.plist
 
-O arquivo `Info.plist` já está configurado com:
-- `LSUIElement = true` - Remove o ícone do Dock
-- Configurações de alta resolução
+The `Info.plist` file is already configured with:
+- `LSUIElement = true` - Removes Dock icon
+- High-resolution settings
 
-### 3. Permissões de Acessibilidade
+### 3. Accessibility Permissions
 
-O app precisa de permissões de acessibilidade para capturar texto selecionado:
+The app requires accessibility permissions to capture selected text:
 
-1. Vá em **System Settings > Privacy & Security > Accessibility**
-2. Adicione o TextListener à lista de apps permitidos
-3. Reinicie o app após conceder permissões
+1. Go to **System Settings > Privacy & Security > Accessibility**
+2. Add TextListener to the list of allowed apps
+3. Restart the app after granting permissions
 
-## Uso
+## Usage
 
-1. **Iniciar o App**: Execute o app - ele aparecerá apenas na barra de menu
-2. **Selecionar Texto**: Selecione texto em qualquer aplicativo
-3. **Ler Texto**: Clique no ícone na barra de menu e selecione "Read Selection"
-4. **Controles**: Use os botões de pause/resume/stop para controlar a leitura
-5. **Velocidade**: Ajuste o slider de velocidade conforme necessário
-6. **Janela Flutuante**: Ative a janela flutuante para ver o progresso da leitura
+1. **Launch App**: Run the app - it will appear only in the menu bar
+2. **Select Text**: Select text in any application
+3. **Read Text**: Click the icon in the menu bar and select "Read Selection"
+4. **Controls**: Use the pause/resume/stop buttons to control reading
+5. **Speed**: Adjust the speed slider as needed
+6. **Floating Window**: Enable the floating window to see reading progress
 
-## Funcionalidades Técnicas
+## Technical Features
 
 ### SpeechManager
-- Gerencia síntese de voz usando `AVSpeechSynthesizer`
-- Suporta play, pause, resume e stop
-- Controla velocidade de fala
-- Rastreia progresso da leitura (aproximado)
+- Manages speech synthesis using `AVSpeechSynthesizer`
+- Supports play, pause, resume, and stop
+- Controls speech speed
+- Tracks reading progress (approximate)
 
 ### TextCaptureManager
-- Usa `AXUIElement` (Accessibility API) para capturar texto selecionado
-- Busca recursivamente por texto selecionado na hierarquia de UI
-- Fallback para clipboard se a Accessibility API falhar
+- Uses `AXUIElement` (Accessibility API) to capture selected text
+- Recursively searches for selected text in UI hierarchy
+- Falls back to clipboard if Accessibility API fails
 
 ### Floating Window
-- Janela sempre no topo (`.floating` level)
-- Efeito blur estilo expo-blur usando `NSVisualEffectView`
-- Mostra progresso da leitura em tempo real
-- Controles de playback integrados
+- Always-on-top window (`.floating` level)
+- Blur effect using `NSVisualEffectView`
+- Shows reading progress in real-time
+- Integrated playback controls
 
-## Notas de Implementação
+## Implementation Notes
 
 ### Accessibility API
-A captura de texto usa a Accessibility API do macOS. Alguns aplicativos podem não expor texto selecionado através desta API. Nesses casos, o app usa o clipboard como fallback (requer que o usuário copie o texto manualmente).
+Text capture uses macOS Accessibility API. Some applications may not expose selected text through this API. In these cases, the app uses the clipboard as a fallback (requires the user to copy the text manually).
 
-### Progresso da Leitura
-O `AVSpeechSynthesizer` não fornece progresso exato da leitura. A implementação atual usa uma estimativa baseada em tempo. Para uma implementação mais precisa, seria necessário rastrear posições de palavras/caracteres manualmente.
+### Reading Progress
+`AVSpeechSynthesizer` does not provide exact reading progress. The current implementation uses a time-based estimate. For a more precise implementation, it would be necessary to track word/character positions manually.
 
-## Princípios de Design
+## Design Principles
 
-A interface segue os princípios heurísticos de Nielsen:
-1. **Visibilidade do Status**: Progresso e estado sempre visíveis
-2. **Correspondência Sistema-Mundo**: Controles familiares (play, pause, stop)
-3. **Controle do Usuário**: Controles claros para todas as ações
-4. **Consistência**: Padrões de UI do macOS
-5. **Prevenção de Erros**: Validação antes de ações
-6. **Reconhecimento**: Ícones e labels claros
-7. **Flexibilidade**: Múltiplas formas de acesso (menu bar e janela flutuante)
-8. **Design Minimalista**: Interface limpa e focada
+The interface follows Nielsen's heuristic principles:
+1. **Visibility of System Status**: Progress and state always visible
+2. **Match Between System and Real World**: Familiar controls (play, pause, stop)
+3. **User Control**: Clear controls for all actions
+4. **Consistency**: macOS UI patterns
+5. **Error Prevention**: Validation before actions
+6. **Recognition**: Clear icons and labels
+7. **Flexibility**: Multiple access methods (menu bar and floating window)
+8. **Minimalist Design**: Clean and focused interface
 
-## Licença
+## License
 
 Copyright © 2024. All rights reserved.
 
